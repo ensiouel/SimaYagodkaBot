@@ -11,7 +11,7 @@ type Config struct {
 }
 
 type OpenWeatherMap struct {
-	APIKey string `env:"OPENWEATHERMAP_API_KEY"`
+	APIKey string `env:"OPENWEATHERMAP_API_KEY" env-required:"true"`
 }
 
 type Bot struct {
@@ -20,7 +20,7 @@ type Bot struct {
 }
 
 type Telegram struct {
-	Token string `env:"BOT_TELEGRAM_TOKEN"`
+	Token string `env:"BOT_TELEGRAM_TOKEN" env-required:"true"`
 }
 
 func New() Config {
