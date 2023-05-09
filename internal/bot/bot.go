@@ -16,7 +16,10 @@ type Bot struct {
 }
 
 func New(conf config.Config) *Bot {
-	api, _ := tgbotapi.NewBotAPI(conf.Bot.Telegram.Token)
+	api, err := tgbotapi.NewBotAPI(conf.Bot.Telegram.Token)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	if conf.Bot.Debug {
 		api.Debug = true
@@ -70,7 +73,7 @@ func (bot *Bot) Run() {
 
 	currentWeatherData, err := openweathermap.NewCurrent("C", "ru", bot.conf.OpenWeatherMap.APIKey)
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 
 	weatherService := service.NewWeatherService(currentWeatherData)
