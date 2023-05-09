@@ -25,7 +25,7 @@ type Telegram struct {
 
 func New() Config {
 	var conf Config
-	err := cleanenv.ReadConfig(".env", &conf)
+	err := cleanenv.ReadEnv(&conf)
 	if err != nil {
 		log.Fatal(err)
 	}
