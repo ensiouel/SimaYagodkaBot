@@ -1,6 +1,8 @@
 package main
 
-import "SimaYagodkaBot/internal/app"
+import (
+	"SimaYagodkaBot/internal/app"
+)
 
 func main() {
 	app.New().

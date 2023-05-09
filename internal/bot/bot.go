@@ -29,30 +29,33 @@ func New(conf config.Config) *Bot {
 }
 
 func (bot *Bot) Run() {
-	updateConfig := tgbotapi.NewUpdate(0)
-	updateConfig.Timeout = 60
-
-	updatesChannel := bot.api.GetUpdatesChan(updateConfig)
-
 	mux := telemux.NewMux().
-		AddHandler(telemux.NewCommandHandler("start", telemux.Any(), func(update *telemux.Update) {
-			bot.api.Send(tgbotapi.NewMessage(
-				update.EffectiveChat().ID,
-				`
+		AddHandler(telemux.NewCommandHandler(
+			"start",
+			telemux.Any(),
+			func(update *telemux.Update) {
+				bot.api.Send(tgbotapi.NewMessage(
+					update.EffectiveChat().ID,
+					`
 Привет, я бот SimaYagodkaBot
 
 Если не знаешь что делать, пиши /help
 `,
-			))
-		})).
-		AddHandler(telemux.NewCommandHandler("help", telemux.Any(), func(update *telemux.Update) {
-			bot.api.Send(tgbotapi.NewMessage(
-				update.EffectiveChat().ID,
-				`
+				))
+			},
+		)).
+		AddHandler(telemux.NewCommandHandler(
+			"help",
+			telemux.Any(),
+			func(update *telemux.Update) {
+				bot.api.Send(tgbotapi.NewMessage(
+					update.EffectiveChat().ID,
+					`
 Напишите название города, чтобы узнать его текущую погоду!
 `,
-			))
-		})).
+				))
+			},
+		)).
 		SetRecover(func(update *telemux.Update, err error, s string) {
 			chat := update.EffectiveChat()
 			if chat != nil {
@@ -74,6 +77,11 @@ func (bot *Bot) Run() {
 
 	handler.NewWeatherHandler(bot.api, weatherService).
 		Register(mux)
+
+	updateConfig := tgbotapi.NewUpdate(0)
+	updateConfig.Timeout = 60
+
+	updatesChannel := bot.api.GetUpdatesChan(updateConfig)
 
 	for update := range updatesChannel {
 		mux.Dispatch(bot.api, update)

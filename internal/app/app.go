@@ -5,15 +5,19 @@ import (
 	"SimaYagodkaBot/internal/config"
 )
 
-type App struct{}
+type App struct {
+	conf config.Config
+}
 
 func New() *App {
-	return &App{}
+	conf := config.New()
+
+	return &App{
+		conf: conf,
+	}
 }
 
 func (app *App) Run() {
-	conf := config.New()
-
-	bot.New(conf).
+	bot.New(app.conf).
 		Run()
 }
